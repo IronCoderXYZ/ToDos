@@ -2,23 +2,37 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 import { Button, Card, CardSection, Header, Input } from './components/common';
 
 class App extends Component {
   state = { tasks: ['Trash', 'Groceries', 'Taxes'], task: '' }
 
+  componentWillMount() {
+    AsyncStorage.getItem('tasks')
+      .then((response) => {
+        this.setState({ tasks: JSON.parse(response) });
+      });
+  }
+
+  setStorage() {
+    AsyncStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+  }
+
   completeTask(index) {
     console.log(this.state.tasks[index]);
     let tasks = this.state.tasks;
     tasks = tasks.slice(0, index).concat(tasks.slice(index + 1));
     this.setState({ tasks });
+    this.setStorage();
   }
 
   addTask(task) {
     const tasks = this.state.tasks.concat([task]);
     this.setState({ tasks, task: '' });
+    this.setStorage();
   }
 
   renderTaskList(tasks) {
