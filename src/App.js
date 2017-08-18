@@ -22,7 +22,6 @@ class App extends Component {
   }
 
   completeTask(index) {
-    console.log(this.state.tasks[index]);
     let tasks = this.state.tasks;
     tasks = tasks.slice(0, index).concat(tasks.slice(index + 1));
     this.setState({ tasks });
